@@ -1,0 +1,171 @@
+---
+title: "Text analytics quickref"
+author: "Chris Johnson"
+html_output:
+  toc: true
+  toc_float: true
+---
+
+```{r}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## Concepts
+
+A *token* is a meaningful unit of text. Tokens are created via a process called *tokenization*. To do tidy text analysis in R, tokens should be stored in a `tibble` object, one row per token. Tokenization is the process of producing tokens from text. The most common unit is a word, but sometimes its useful to create character, n-gram, sentence, line, or paragraph tokens.
+
+*Stop words* are common words that have been deemed to have little-to-no analytic value. While some words are always common, whether or not they are of analytic value can change from analysis to analysis, so don't exclude words from analysis without a good reason, because it's easy to do and can influence the results.
+
+A *lexicon* is...
+
+## `{tidytext}`
+
+`{tidytext}` provides a tokenization process that is implemented as `tidytext::unnest_tokens()`. This function asks for the field containing the text data to be tokenized. Once the tokens are created, they need to be stored in a new field. The function also asks you what name you'd like to use for this new field. `tidytext::unnest_tokens()` returns a `tibble` object.
+
+`tidytext::unnest_tokens()` has some defaults, including stripping punctuation and converting tokens to lowercase. Because the `tibble` is tidy, Tidyverse functions can be applied to it for analysis. A basic summary can be performed with `{dplyr}`, for example `dplyr::count()`.
+
+`{tidytext}` ships with `stop_words`, a data set with stop words from three lexicons. This data set can be a basis for removing words of little to no analytic value. Because it is a `tibble`, it can easily be modified before applying using tidy tools. To remove stop words from a tidy `tibble`, pipe it to `dplyr::anti_join()`, passing the tidy `tibble` to `x` and `stop_words` to `y`.
+
+## Packages for building skills
+
+`{janeaustenr}`
+`{gutenbergr}`
+
+## Basic analysis
+
+Single document: Count the words in a document, and create a plot of the top $n$ frequently occurring words.
+
+A document to one or more documents: Compute the relative frequency of words for all documents. In the case of comparing two documents, create a scatterplot of relative frequencies of words that appear in both. Add a diagonal reference line with slope 1. Points near the reference line appear at similar relative frequencies. Label words that are close by initializing a field for the labels, computing the differences in relative frequencies, applying a threshold, and populating the label field if the differences are within a threshold. A similar approach is to use the difference to populate a field for the transparency aesthetic, so that words close to the reference line are opaque while those far from it are transparent (or practically invisible).
+
+A correlation test can be performed with `cor.test()` which will quantify how similar or different these 
+
+## Wordclouds
+
+`wordcloud::wordcloud()` will plot a word cloud.
+
+`wordcloud::comparison.cloud()` will plot a cloud comparing the frequencies of words across documents.
+
+## Sentiment analysis
+
+To cover at a later time. Packages suggested: `{coreNLP}`, `{cleanNLP}`, and `{sentimentr}`.
+
+## Word and document frequency
+
+*Quantifying what a document is about*.
+
+Some words occur many times, but aren't important. Sometimes, it's appropriate
+to flag these words as stop words, but not always, because even though common,
+can be important sometimes. Instead, use a term's inverse document frequency,
+which down-weights common words and up-weights less common words. These
+weights are applied to the term frequency (tf).
+
+tf-idf: How important is a word to a document in a corpus? Examples of
+documents: *a* novel; *a* website. The associated corpora: *all* the books on
+a bookshelf; *all* the related websites. (Sometimes a corpus has a natural
+definition; other times it's more abstract.)
+
+`tidytext::bind_tf_idf()` column-binds fields `tf`, `idf`, and `tf_idf` to a tidy text dataset (field containing terms, field serving as a document identifier, and field containing the term frequencies).
+
+The blueprint is
+```{r}
+tidy_text %>%
+  tidytext::unnest_tokens() %>%
+  dplyr::count() %>%
+  tidytext::bind_tf_idf()
+```
+
+## Relationships between words
+
+Relationships between words and sentiments
+Relationships between words and documents
+Relationships between words and words in time
+Relationships between co-occurring words
+
+## Stop words
+
+Stop words can be removed before computing tf&ndash;idf.
+
+Custom stop words: To apply stop words, create a `tibble` with one stop word per row, then anti-join it to the tidy text dataset.
+
+## Helpful Tidyverse functions
+
+`dplyr::slice_max()`, `dplyr::slice_min()`
+
+`forcats::fct_reorder()`
+
+`ggplot2::geom_col()`, `ggplo2::facet_wrap()`, `ggplot2::labs()`
+
+`{stringr}`
+
+`{ggraph}` `{widyr}`
+
+`tidyr::separate()` to split an $n$-gram field into multiple fields. This is how stop words can be applied to $n$-grams. Rather than using `dplyr::anti_join()`, use `dplyr::filter()` on each field to remove rows that contain stop words.
+
+`tidyr::unite()`
+
+As $n$ increases, the results can become more informative but the counts can become sparser.
+
+Context matters in sentiment analysis. For example, if tokenizing by unigrams, "happy" and "like" might be positive words according to some lexicon. However, if those words appear in the sentence "I'm *not* happy and I *don't* like it", then this is clearly incorrect. Using bigrams allows one to filter to words preceded by "not", "don't", etc. This approach can be used to discard tokens or flip the sentiment defined by a lexicon.
+
+`dplyr::inner_join()` is useful for joining a sentiment lexicon to a tidy text dataset. This excludes tokens in the tidy text dataset that do not appear in the sentiment lexicon.
+
+One example: Do sentiment analysis on unigrams. Then use bigrams to identify words preceded by "not". For a given word, identify the number of times it was preceded by "not" (or other polarity-changing words) and multiply those by the sentiment value. This allows one to visualize how much error is in the sentiment analysis.
+
+To examine all polarity-changing words, create a vector of negation words and use it to filter the first-word field and apply the same logic.
+
+Bigram networks
+
+To create a bigram network, pass a counts dataset to `igraph::graph_from_data_frame()`. To visualize, use `{ggraph}`. An example:
+
+```{r}
+ggraph::ggraph() +
+  ggraph::geom_edge_link() +
+  ggraph::geom_node_point() +
+  ggraph::geom_node_text()
+```
+
+In a counts dataset, the counts will be used as the edge weight. It is helpful to specify `edge_alpha` in `ggraph::geom_edge_link()` to highlight bigrams that are more common by making their links more opaque.
+
+The words in a bigram are ordered, so to remove ambiguity, it is best to specify an arrow to use and pass to `arrow` of `ggraph::geom_edge_link()`. This can be accomplished with `{grid}`, specifically `grid::arrow()`. An example:
+
+```{r}
+a <- 
+  grid::arrow(
+    type = "closed", 
+    length = grid::unit(x = 0.15, units = "inches")
+  )
+```
+
+To terminate the edge before it reaches the node, set the `end_cap` option of `ggraph::geom_edge_length()`. A full example:
+
+```{r}
+a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n), show.legend = FALSE,
+                 arrow = a, end_cap = circle(.07, 'inches')) +
+  geom_node_point(color = "lightblue", size = 5) +
+  geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+  theme_void()
+```
+
+Above: Analyzed adjacent words. Next: Analyze words that co-occur within a document:
+
+Correlation functions typically operate on a matrix, which is a non-tidy format. `{widyr}` helps with the process of widening tidy datasets to a non-tidy intermediate structure (such as a matrix), performing an operation, then longifying back to a tidy dataset.
+
+Example: Dividing a book into 10-word sections. A tidy text dataset would have&mash;at a minimum&mdash;a field for `section` and a field for `word`. `widyr::pairwise_count()` will return the number of sections any pair of words appear.
+
+Keep in mind: It's not surprising that a pair of words is the most common if those words are the most frequent words. A better approach is to use correlation among words which will instead indicate how often words appear together *relative to how often they appear separately*.
+
+This is accomplished with `widyr::pairwise_cor()`. The output is a lillypad for exploring the words correlated to a word of interest. The network visualization can be applied to these results as well.
+
+Filtering the correlation based on a correlation threshold $c$, a network can show *pairs of words with $c$ correlation of appearing within the same group (section, etc.)*.
+
+In summary, you can analyze sequences of words and proximity of words.
+
+> Using term frequency and inverse document frequency allows us to find words that are characteristic for one document within a collection of documents
+
+> If you find you share words with high tf&ndash;idf across categories (books, authors), you may want to use `reorder_within()` and `scale_*_reordered()` to create visualizations (see [Section 6.1.1](https://www.tidytextmining.com/topicmodeling.html#word-topic-probabilities) of Text Mining with R).
+
+
+
