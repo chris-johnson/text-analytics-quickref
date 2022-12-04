@@ -167,5 +167,12 @@ In summary, you can analyze sequences of words and proximity of words.
 
 > If you find you share words with high tf&ndash;idf across categories (books, authors), you may want to use `reorder_within()` and `scale_*_reordered()` to create visualizations (see [Section 6.1.1](https://www.tidytextmining.com/topicmodeling.html#word-topic-probabilities) of Text Mining with R).
 
+## Topic modeling
 
+Topic modeling is a general term for unsupervised classification of documents. Latent Dirichlet allocation (LDA) is one popular method for fitting a topic model. It is a soft clustering algorithm.
 
+`{topicmodels}`
+
+Every topic is a mixture of topics; every topic is a mixture of words. LDA finds the mixture of words associated with each topic and the mixture of topics that describes each document.
+
+`topicmodels::LDA()`

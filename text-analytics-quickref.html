@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Chris Johnson">
+
+<title>Text analytics quickref</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="text-analytics-quickref_files/libs/clipboard/clipboard.min.js"></script>
+<script src="text-analytics-quickref_files/libs/quarto-html/quarto.js"></script>
+<script src="text-analytics-quickref_files/libs/quarto-html/popper.min.js"></script>
+<script src="text-analytics-quickref_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="text-analytics-quickref_files/libs/quarto-html/anchor.min.js"></script>
+<link href="text-analytics-quickref_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="text-analytics-quickref_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="text-analytics-quickref_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="text-analytics-quickref_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="text-analytics-quickref_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#concepts" id="toc-concepts" class="nav-link active" data-scroll-target="#concepts">Concepts</a></li>
+  <li><a href="#tidytext" id="toc-tidytext" class="nav-link" data-scroll-target="#tidytext"><code>{tidytext}</code></a></li>
+  <li><a href="#packages-for-building-skills" id="toc-packages-for-building-skills" class="nav-link" data-scroll-target="#packages-for-building-skills">Packages for building skills</a></li>
+  <li><a href="#basic-analysis" id="toc-basic-analysis" class="nav-link" data-scroll-target="#basic-analysis">Basic analysis</a></li>
+  <li><a href="#wordclouds" id="toc-wordclouds" class="nav-link" data-scroll-target="#wordclouds">Wordclouds</a></li>
+  <li><a href="#sentiment-analysis" id="toc-sentiment-analysis" class="nav-link" data-scroll-target="#sentiment-analysis">Sentiment analysis</a></li>
+  <li><a href="#word-and-document-frequency" id="toc-word-and-document-frequency" class="nav-link" data-scroll-target="#word-and-document-frequency">Word and document frequency</a></li>
+  <li><a href="#relationships-between-words" id="toc-relationships-between-words" class="nav-link" data-scroll-target="#relationships-between-words">Relationships between words</a></li>
+  <li><a href="#stop-words" id="toc-stop-words" class="nav-link" data-scroll-target="#stop-words">Stop words</a></li>
+  <li><a href="#helpful-tidyverse-functions" id="toc-helpful-tidyverse-functions" class="nav-link" data-scroll-target="#helpful-tidyverse-functions">Helpful Tidyverse functions</a></li>
+  <li><a href="#topic-modeling" id="toc-topic-modeling" class="nav-link" data-scroll-target="#topic-modeling">Topic modeling</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Text analytics quickref</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chris Johnson </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">eval =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="concepts" class="level2">
+<h2 class="anchored" data-anchor-id="concepts">Concepts</h2>
+<p>A <em>token</em> is a meaningful unit of text. Tokens are created via a process called <em>tokenization</em>. To do tidy text analysis in R, tokens should be stored in a <code>tibble</code> object, one row per token. Tokenization is the process of producing tokens from text. The most common unit is a word, but sometimes its useful to create character, n-gram, sentence, line, or paragraph tokens.</p>
+<p><em>Stop words</em> are common words that have been deemed to have little-to-no analytic value. While some words are always common, whether or not they are of analytic value can change from analysis to analysis, so don’t exclude words from analysis without a good reason, because it’s easy to do and can influence the results.</p>
+<p>A <em>lexicon</em> is…</p>
+</section>
+<section id="tidytext" class="level2">
+<h2 class="anchored" data-anchor-id="tidytext"><code>{tidytext}</code></h2>
+<p><code>{tidytext}</code> provides a tokenization process that is implemented as <code>tidytext::unnest_tokens()</code>. This function asks for the field containing the text data to be tokenized. Once the tokens are created, they need to be stored in a new field. The function also asks you what name you’d like to use for this new field. <code>tidytext::unnest_tokens()</code> returns a <code>tibble</code> object.</p>
+<p><code>tidytext::unnest_tokens()</code> has some defaults, including stripping punctuation and converting tokens to lowercase. Because the <code>tibble</code> is tidy, Tidyverse functions can be applied to it for analysis. A basic summary can be performed with <code>{dplyr}</code>, for example <code>dplyr::count()</code>.</p>
+<p><code>{tidytext}</code> ships with <code>stop_words</code>, a data set with stop words from three lexicons. This data set can be a basis for removing words of little to no analytic value. Because it is a <code>tibble</code>, it can easily be modified before applying using tidy tools. To remove stop words from a tidy <code>tibble</code>, pipe it to <code>dplyr::anti_join()</code>, passing the tidy <code>tibble</code> to <code>x</code> and <code>stop_words</code> to <code>y</code>.</p>
+</section>
+<section id="packages-for-building-skills" class="level2">
+<h2 class="anchored" data-anchor-id="packages-for-building-skills">Packages for building skills</h2>
+<p><code>{janeaustenr}</code> <code>{gutenbergr}</code></p>
+</section>
+<section id="basic-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="basic-analysis">Basic analysis</h2>
+<p>Single document: Count the words in a document, and create a plot of the top <span class="math inline">\(n\)</span> frequently occurring words.</p>
+<p>A document to one or more documents: Compute the relative frequency of words for all documents. In the case of comparing two documents, create a scatterplot of relative frequencies of words that appear in both. Add a diagonal reference line with slope 1. Points near the reference line appear at similar relative frequencies. Label words that are close by initializing a field for the labels, computing the differences in relative frequencies, applying a threshold, and populating the label field if the differences are within a threshold. A similar approach is to use the difference to populate a field for the transparency aesthetic, so that words close to the reference line are opaque while those far from it are transparent (or practically invisible).</p>
+<p>A correlation test can be performed with <code>cor.test()</code> which will quantify how similar or different these</p>
+</section>
+<section id="wordclouds" class="level2">
+<h2 class="anchored" data-anchor-id="wordclouds">Wordclouds</h2>
+<p><code>wordcloud::wordcloud()</code> will plot a word cloud.</p>
+<p><code>wordcloud::comparison.cloud()</code> will plot a cloud comparing the frequencies of words across documents.</p>
+</section>
+<section id="sentiment-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="sentiment-analysis">Sentiment analysis</h2>
+<p>To cover at a later time. Packages suggested: <code>{coreNLP}</code>, <code>{cleanNLP}</code>, and <code>{sentimentr}</code>.</p>
+</section>
+<section id="word-and-document-frequency" class="level2">
+<h2 class="anchored" data-anchor-id="word-and-document-frequency">Word and document frequency</h2>
+<p><em>Quantifying what a document is about</em>.</p>
+<p>Some words occur many times, but aren’t important. Sometimes, it’s appropriate to flag these words as stop words, but not always, because even though common, can be important sometimes. Instead, use a term’s inverse document frequency, which down-weights common words and up-weights less common words. These weights are applied to the term frequency (tf).</p>
+<p>tf-idf: How important is a word to a document in a corpus? Examples of documents: <em>a</em> novel; <em>a</em> website. The associated corpora: <em>all</em> the books on a bookshelf; <em>all</em> the related websites. (Sometimes a corpus has a natural definition; other times it’s more abstract.)</p>
+<p><code>tidytext::bind_tf_idf()</code> column-binds fields <code>tf</code>, <code>idf</code>, and <code>tf_idf</code> to a tidy text dataset (field containing terms, field serving as a document identifier, and field containing the term frequencies).</p>
+<p>The blueprint is</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tidy_text <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">bind_tf_idf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="relationships-between-words" class="level2">
+<h2 class="anchored" data-anchor-id="relationships-between-words">Relationships between words</h2>
+<p>Relationships between words and sentiments Relationships between words and documents Relationships between words and words in time Relationships between co-occurring words</p>
+</section>
+<section id="stop-words" class="level2">
+<h2 class="anchored" data-anchor-id="stop-words">Stop words</h2>
+<p>Stop words can be removed before computing tf–idf.</p>
+<p>Custom stop words: To apply stop words, create a <code>tibble</code> with one stop word per row, then anti-join it to the tidy text dataset.</p>
+</section>
+<section id="helpful-tidyverse-functions" class="level2">
+<h2 class="anchored" data-anchor-id="helpful-tidyverse-functions">Helpful Tidyverse functions</h2>
+<p><code>dplyr::slice_max()</code>, <code>dplyr::slice_min()</code></p>
+<p><code>forcats::fct_reorder()</code></p>
+<p><code>ggplot2::geom_col()</code>, <code>ggplo2::facet_wrap()</code>, <code>ggplot2::labs()</code></p>
+<p><code>{stringr}</code></p>
+<p><code>{ggraph}</code> <code>{widyr}</code></p>
+<p><code>tidyr::separate()</code> to split an <span class="math inline">\(n\)</span>-gram field into multiple fields. This is how stop words can be applied to <span class="math inline">\(n\)</span>-grams. Rather than using <code>dplyr::anti_join()</code>, use <code>dplyr::filter()</code> on each field to remove rows that contain stop words.</p>
+<p><code>tidyr::unite()</code></p>
+<p>As <span class="math inline">\(n\)</span> increases, the results can become more informative but the counts can become sparser.</p>
+<p>Context matters in sentiment analysis. For example, if tokenizing by unigrams, “happy” and “like” might be positive words according to some lexicon. However, if those words appear in the sentence “I’m <em>not</em> happy and I <em>don’t</em> like it”, then this is clearly incorrect. Using bigrams allows one to filter to words preceded by “not”, “don’t”, etc. This approach can be used to discard tokens or flip the sentiment defined by a lexicon.</p>
+<p><code>dplyr::inner_join()</code> is useful for joining a sentiment lexicon to a tidy text dataset. This excludes tokens in the tidy text dataset that do not appear in the sentiment lexicon.</p>
+<p>One example: Do sentiment analysis on unigrams. Then use bigrams to identify words preceded by “not”. For a given word, identify the number of times it was preceded by “not” (or other polarity-changing words) and multiply those by the sentiment value. This allows one to visualize how much error is in the sentiment analysis.</p>
+<p>To examine all polarity-changing words, create a vector of negation words and use it to filter the first-word field and apply the same logic.</p>
+<p>Bigram networks</p>
+<p>To create a bigram network, pass a counts dataset to <code>igraph::graph_from_data_frame()</code>. To visualize, use <code>{ggraph}</code>. An example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ggraph<span class="sc">::</span><span class="fu">ggraph</span>() <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">geom_edge_link</span>() <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">geom_node_point</span>() <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">geom_node_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In a counts dataset, the counts will be used as the edge weight. It is helpful to specify <code>edge_alpha</code> in <code>ggraph::geom_edge_link()</code> to highlight bigrams that are more common by making their links more opaque.</p>
+<p>The words in a bigram are ordered, so to remove ambiguity, it is best to specify an arrow to use and pass to <code>arrow</code> of <code>ggraph::geom_edge_link()</code>. This can be accomplished with <code>{grid}</code>, specifically <code>grid::arrow()</code>. An example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  grid<span class="sc">::</span><span class="fu">arrow</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"closed"</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">length =</span> grid<span class="sc">::</span><span class="fu">unit</span>(<span class="at">x =</span> <span class="fl">0.15</span>, <span class="at">units =</span> <span class="st">"inches"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To terminate the edge before it reaches the node, set the <code>end_cap</code> option of <code>ggraph::geom_edge_length()</code>. A full example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> grid<span class="sc">::</span><span class="fu">arrow</span>(<span class="at">type =</span> <span class="st">"closed"</span>, <span class="at">length =</span> <span class="fu">unit</span>(.<span class="dv">15</span>, <span class="st">"inches"</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(bigram_graph, <span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">edge_alpha =</span> n), <span class="at">show.legend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">arrow =</span> a, <span class="at">end_cap =</span> <span class="fu">circle</span>(.<span class="dv">07</span>, <span class="st">'inches'</span>)) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">"lightblue"</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Above: Analyzed adjacent words. Next: Analyze words that co-occur within a document:</p>
+<p>Correlation functions typically operate on a matrix, which is a non-tidy format. <code>{widyr}</code> helps with the process of widening tidy datasets to a non-tidy intermediate structure (such as a matrix), performing an operation, then longifying back to a tidy dataset.</p>
+<p>Example: Dividing a book into 10-word sections. A tidy text dataset would have&amp;mash;at a minimum—a field for <code>section</code> and a field for <code>word</code>. <code>widyr::pairwise_count()</code> will return the number of sections any pair of words appear.</p>
+<p>Keep in mind: It’s not surprising that a pair of words is the most common if those words are the most frequent words. A better approach is to use correlation among words which will instead indicate how often words appear together <em>relative to how often they appear separately</em>.</p>
+<p>This is accomplished with <code>widyr::pairwise_cor()</code>. The output is a lillypad for exploring the words correlated to a word of interest. The network visualization can be applied to these results as well.</p>
+<p>Filtering the correlation based on a correlation threshold <span class="math inline">\(c\)</span>, a network can show <em>pairs of words with <span class="math inline">\(c\)</span> correlation of appearing within the same group (section, etc.)</em>.</p>
+<p>In summary, you can analyze sequences of words and proximity of words.</p>
+<blockquote class="blockquote">
+<p>Using term frequency and inverse document frequency allows us to find words that are characteristic for one document within a collection of documents</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>If you find you share words with high tf–idf across categories (books, authors), you may want to use <code>reorder_within()</code> and <code>scale_*_reordered()</code> to create visualizations (see <a href="https://www.tidytextmining.com/topicmodeling.html#word-topic-probabilities">Section 6.1.1</a> of Text Mining with R).</p>
+</blockquote>
+</section>
+<section id="topic-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="topic-modeling">Topic modeling</h2>
+<p>Topic modeling is a general term for unsupervised classification of documents. Latent Dirichlet allocation (LDA) is one popular method for fitting a topic model. It is a soft clustering algorithm.</p>
+<p><code>{topicmodels}</code></p>
+<p>Every topic is a mixture of topics; every topic is a mixture of words. LDA finds the mixture of words associated with each topic and the mixture of topics that describes each document.</p>
+<p><code>topicmodels::LDA()</code></p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
